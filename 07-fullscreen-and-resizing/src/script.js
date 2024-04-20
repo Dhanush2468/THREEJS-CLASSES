@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
+import './style.css'
 /**
  * Base
  */
@@ -21,10 +21,87 @@ scene.add(mesh)
 /**
  * Sizes
  */
+// const sizes = {
+//     width: 800,
+//     height: 600
+// }
+
+// step - 1 update this 
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 }
+// step-2 styling using css file
+// step -3 handieling resizing
+
+window.addEventListener('resize', () =>
+{
+    // console.log("window resized")
+
+    //update sizes 
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    //update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    //update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))    
+})
+
+
+//Now that we have the canvas taking all the available space with the right pixel ratio, it's time to add support to the fullscreen.
+
+
+// this is for windows
+// window.addEventListener('dblclick', () =>
+// {
+//     if(!document.fullscreenElement)
+//     {
+//         // console.log('go fullscreen')
+//         canvas.requestFullscreen()
+//     }
+//     else
+//     {
+//        document.exitFullscreen()
+//     }
+// })
+
+// to work in safari ana all browsers update like this
+window.addEventListener('dblclick', () =>
+{
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement
+
+    if(!fullscreenElement)
+    {
+        if(canvas.requestFullscreen)
+        {
+            canvas.requestFullscreen()
+        }
+        else if(canvas.webkitRequestFullscreen)
+        {
+            canvas.webkitRequestFullscreen()
+        }
+    }
+    else
+    {
+        if(document.exitFullscreen)
+        {
+            document.exitFullscreen()
+        }
+        else if(document.webkitExitFullscreen)
+        {
+            document.webkitExitFullscreen()
+        }
+    }
+})
+
+
+
+
+
 
 /**
  * Camera
@@ -36,6 +113,7 @@ scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
+// controls.enabled = false // to stop rotating cube 360degreee
 controls.enableDamping = true
 
 /**
